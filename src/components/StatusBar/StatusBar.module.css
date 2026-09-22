@@ -1,0 +1,9 @@
+.bar {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.error {
+  color: #b91c1c;
+}
