@@ -1,15 +1,19 @@
 import { useState, type DragEvent } from 'react';
 import { useImageLoader } from '../hooks/useImageLoader';
 import { useChannelVisibility } from '../hooks/useChannelVisibility';
+import { useEyedropper } from '../hooks/useEyedropper';
 import { CanvasViewer } from './CanvasViewer/CanvasViewer';
 import { FileToolbar } from './FileToolbar/FileToolbar';
 import { StatusBar } from './StatusBar/StatusBar';
 import { ChannelsPanel } from './ChannelsPanel/ChannelsPanel';
+import { EyedropperButton } from './EyedropperTool/EyedropperButton';
+import { EyedropperReadout } from './EyedropperTool/EyedropperReadout';
 import styles from './App.module.css';
 
 function App() {
   const { image, fileName, error, loadFile } = useImageLoader();
   const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image);
+  const eyedropper = useEyedropper(image);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (event: DragEvent<HTMLElement>) => {
@@ -34,6 +38,7 @@ function App() {
     <div className="app">
       <header className={styles.header}>
         <FileToolbar image={image} onFileSelected={loadFile} />
+        <EyedropperButton active={eyedropper.active} disabled={!image} onToggle={eyedropper.toggle} />
       </header>
       <main className={styles.main}>
         <div
@@ -42,11 +47,19 @@ function App() {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <CanvasViewer image={image} displayPixels={displayPixels} />
+          <CanvasViewer
+            image={image}
+            displayPixels={displayPixels}
+            eyedropperActive={eyedropper.active}
+            onPixelPick={eyedropper.pickAt}
+          />
         </div>
         <aside className={styles.sidebar}>
           {image && profile ? (
-            <ChannelsPanel image={image} profile={profile} visibility={visibility} onToggle={toggle} />
+            <>
+              <ChannelsPanel image={image} profile={profile} visibility={visibility} onToggle={toggle} />
+              <EyedropperReadout active={eyedropper.active} result={eyedropper.result} />
+            </>
           ) : (
             <div className={styles.sidebarHint}>Панель каналов появится после загрузки изображения</div>
           )}
