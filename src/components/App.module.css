@@ -11,6 +11,13 @@
   flex: 1;
   overflow: auto;
   background: #e4e4e7;
+  outline: 2px dashed transparent;
+  outline-offset: -2px;
+}
+
+.mainDragging {
+  outline-color: #3b82f6;
+  background: #dbeafe;
 }
 
 .footer {
