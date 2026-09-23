@@ -34,3 +34,24 @@ export async function decodePngJpg(file: File): Promise<RasterImage> {
     URL.revokeObjectURL(url);
   }
 }
+
+export function encodePngJpg(image: RasterImage, mime: 'image/png' | 'image/jpeg'): Promise<Blob> {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    return Promise.reject(new Error('Canvas 2D недоступен'));
+  }
+  ctx.putImageData(new ImageData(image.pixels, image.width, image.height), 0, 0);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('Не удалось закодировать изображение'));
+      }
+    }, mime);
+  });
+}

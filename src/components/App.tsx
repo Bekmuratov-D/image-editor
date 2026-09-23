@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="app">
       <header className={styles.header}>
-        <FileToolbar onFileSelected={loadFile} />
+        <FileToolbar image={image} onFileSelected={loadFile} />
       </header>
       <main className={styles.main}>
         <CanvasViewer image={image} />

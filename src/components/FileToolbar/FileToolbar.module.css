@@ -19,3 +19,16 @@
 .hiddenInput {
   display: none;
 }
+
+.select {
+  padding: 6px 8px;
+  border: 1px solid #a1a1aa;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
