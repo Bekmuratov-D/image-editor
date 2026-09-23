@@ -9,15 +9,49 @@
 
 .main {
   flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.canvasArea {
+  flex: 1;
+  min-width: 0;
   overflow: auto;
   background: #e4e4e7;
   outline: 2px dashed transparent;
   outline-offset: -2px;
 }
 
-.mainDragging {
+.canvasAreaDragging {
   outline-color: #3b82f6;
   background: #dbeafe;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 220px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-left: 1px solid #d9d9dc;
+  padding: 12px;
+}
+
+.sidebarHint {
+  color: #71717a;
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: 40vh;
+    border-left: none;
+    border-top: 1px solid #d9d9dc;
+  }
 }
 
 .footer {

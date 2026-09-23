@@ -4,14 +4,15 @@ import styles from './CanvasViewer.module.css';
 
 interface CanvasViewerProps {
   image: RasterImage | null;
+  displayPixels: Uint8ClampedArray | null;
 }
 
-export function CanvasViewer({ image }: CanvasViewerProps) {
+export function CanvasViewer({ image, displayPixels }: CanvasViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !image) {
+    if (!canvas || !image || !displayPixels) {
       return;
     }
     canvas.width = image.width;
@@ -20,9 +21,9 @@ export function CanvasViewer({ image }: CanvasViewerProps) {
     if (!ctx) {
       return;
     }
-    const imageData = new ImageData(image.pixels, image.width, image.height);
+    const imageData = new ImageData(displayPixels, image.width, image.height);
     ctx.putImageData(imageData, 0, 0);
-  }, [image]);
+  }, [image, displayPixels]);
 
   if (!image) {
     return <div className={styles.placeholder}>Загрузите изображение (PNG, JPG или GB7)</div>;
