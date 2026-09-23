@@ -1,7 +1,7 @@
 import type { RasterImage } from '../image/RasterImage';
 import type { ChannelId } from './channelProfile';
 
-function readChannelValue(pixels: Uint8ClampedArray, pixelOffset: number, channelId: ChannelId): number {
+export function readChannelValue(pixels: Uint8ClampedArray, pixelOffset: number, channelId: ChannelId): number {
   switch (channelId) {
     case 'gray':
     case 'r':
