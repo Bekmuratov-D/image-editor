@@ -1,50 +1,32 @@
-# React + TypeScript + Vite
+# image-editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебный проект по курсу "Технологии компьютерной графики". Браузерный редактор изображений на React + TypeScript.
 
-Currently, two official plugins are available:
+Хостинг: https://bekmuratov-d.github.io/image-editor/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Лаба 1 — цифровое представление изображения
 
-## Expanding the ESLint configuration
+Реализовано:
+- загрузка и отрисовка изображений на `<canvas>`;
+- поддержка PNG и JPG (через встроенные возможности браузера);
+- поддержка собственного формата **GB7** — кодек написан руками, без библиотек;
+- статус-бар с шириной, высотой и глубиной цвета изображения;
+- скачивание изображения в PNG, JPG или GB7;
+- загрузка файла через кнопку или drag-and-drop;
+- адаптивная вёрстка.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Формат GB7
 
-- Configure the top-level `parserOptions` property like this:
+GrayBit-7 — 7-битный формат в оттенках серого с опциональной бинарной маской (8-й бит). Подробное описание структуры файла — в коде декодера/энкодера: [gb7Decoder.ts](src/core/codecs/gb7/gb7Decoder.ts), [gb7Encoder.ts](src/core/codecs/gb7/gb7Encoder.ts).
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Так как формат хранит только 7 бит на пиксель, цикл загрузка → сохранение → загрузка не даёт побитово идентичный результат (теряется младший бит серого), это ожидаемое поведение формата, а не ошибка. Сохранение цветного изображения (PNG/JPG) в GB7 переводит его в оттенки серого — формат не умеет хранить цвет.
+
+## Разработка
+
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+npm install
+npm run dev      # локальный сервер разработки
+npm run build     # продакшн-сборка
+npm run lint      # проверка ESLint
+npm run test      # юнит-тесты (Vitest)
 ```
