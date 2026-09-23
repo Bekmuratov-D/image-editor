@@ -74,5 +74,5 @@ export function decodeGb7(buffer: ArrayBuffer): RasterImage {
     pixels[o + 3] = visible ? 255 : 0;
   }
 
-  return { width, height, pixels, bitDepth: 7, hasMask, sourceFormat: 'gb7' };
+  return { width, height, pixels, bitDepth: 7, hasMask, isGrayscale: true, sourceFormat: 'gb7' };
 }

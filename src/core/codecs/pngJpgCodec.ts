@@ -1,4 +1,5 @@
 import type { RasterImage } from '../image/RasterImage';
+import { hasAlphaPngColorType, isGrayscalePngColorType, readPngColorType } from './pngHeader';
 
 function loadImageElement(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -22,13 +23,25 @@ export async function decodePngJpg(file: File): Promise<RasterImage> {
     }
     ctx.drawImage(img, 0, 0);
     const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    const isPng = file.type.includes('png');
+    let isGrayscale = false;
+    let hasAlpha = false;
+    if (isPng) {
+      const headerBytes = await file.slice(0, 26).arrayBuffer();
+      const colorType = readPngColorType(headerBytes);
+      isGrayscale = isGrayscalePngColorType(colorType);
+      hasAlpha = hasAlphaPngColorType(colorType);
+    }
+
     return {
       width,
       height,
       pixels: data,
       bitDepth: 8,
-      hasMask: true,
-      sourceFormat: file.type.includes('png') ? 'png' : 'jpg',
+      hasMask: hasAlpha,
+      isGrayscale,
+      sourceFormat: isPng ? 'png' : 'jpg',
     };
   } finally {
     URL.revokeObjectURL(url);

@@ -10,6 +10,7 @@ function makeImage(pixels: number[], width: number, height: number, hasMask = fa
     pixels: new Uint8ClampedArray(pixels),
     bitDepth: 8,
     hasMask,
+    isGrayscale: false,
     sourceFormat: 'png',
   };
 }

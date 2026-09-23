@@ -6,5 +6,6 @@ export interface RasterImage {
   pixels: Uint8ClampedArray;
   bitDepth: number;
   hasMask: boolean;
+  isGrayscale: boolean;
   sourceFormat: SourceFormat;
 }
