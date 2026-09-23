@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyChannelVisibility } from '../src/core/channels/applyChannelVisibility';
 import { createDefaultVisibility, toggleChannel } from '../src/core/channels/channelVisibility';
-import { extractChannelAsGrayscale } from '../src/core/channels/extractChannel';
+import { extractChannelAsGrayscale, extractChannelPreview } from '../src/core/channels/extractChannel';
 import type { RasterImage } from '../src/core/image/RasterImage';
 
 function makeRgbaImage(): RasterImage {
@@ -27,6 +27,21 @@ describe('extractChannelAsGrayscale', () => {
     expect(Array.from(result)).toEqual([20, 20, 20, 255]);
     expect(image.pixels).toBe(originalPixels);
     expect(Array.from(image.pixels)).toEqual(originalBytes);
+  });
+});
+
+describe('extractChannelPreview', () => {
+  it('тонирует R/G/B канал в его цвет', () => {
+    const image = makeRgbaImage();
+
+    expect(Array.from(extractChannelPreview(image, 'r'))).toEqual([10, 0, 0, 255]);
+    expect(Array.from(extractChannelPreview(image, 'g'))).toEqual([0, 20, 0, 255]);
+    expect(Array.from(extractChannelPreview(image, 'b'))).toEqual([0, 0, 30, 255]);
+  });
+
+  it('alpha остаётся чёрно-белой', () => {
+    const image = makeRgbaImage();
+    expect(Array.from(extractChannelPreview(image, 'alpha'))).toEqual([128, 128, 128, 255]);
   });
 });
 

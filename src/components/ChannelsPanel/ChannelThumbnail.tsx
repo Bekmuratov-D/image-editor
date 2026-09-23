@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { RasterImage } from '../../core/image/RasterImage';
 import type { ChannelId } from '../../core/channels/channelProfile';
-import { extractChannelAsGrayscale } from '../../core/channels/extractChannel';
+import { extractChannelPreview } from '../../core/channels/extractChannel';
 import styles from './ChannelThumbnail.module.css';
 
 interface ChannelThumbnailProps {
@@ -26,7 +26,7 @@ export function ChannelThumbnail({ image, channelId, label, active, onToggle }: 
     if (!ctx) {
       return;
     }
-    const pixels = extractChannelAsGrayscale(image, channelId);
+    const pixels = extractChannelPreview(image, channelId);
     ctx.putImageData(new ImageData(pixels, image.width, image.height), 0, 0);
   }, [image, channelId]);
 
