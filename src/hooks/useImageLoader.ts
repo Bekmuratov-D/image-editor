@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import type { RasterImage } from '../core/image/RasterImage';
 import { decodePngJpg } from '../core/codecs/pngJpgCodec';
+import { decodeGb7 } from '../core/codecs/gb7/gb7Decoder';
+import { detectFormat } from '../core/formats/detectFormat';
 
 interface ImageLoaderState {
   image: RasterImage | null;
@@ -20,7 +22,8 @@ export function useImageLoader() {
   const loadFile = useCallback(async (file: File) => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
     try {
-      const image = await decodePngJpg(file);
+      const format = await detectFormat(file);
+      const image = format === 'gb7' ? decodeGb7(await file.arrayBuffer()) : await decodePngJpg(file);
       setState({ image, fileName: file.name, error: null, isLoading: false });
     } catch (err) {
       setState((prev) => ({
