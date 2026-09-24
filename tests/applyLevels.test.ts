@@ -56,4 +56,28 @@ describe('applyLevels', () => {
   it('createIdentityLevels даёт тождественное преобразование', () => {
     expect(createIdentityLevels()).toEqual({ black: 0, white: 255, gamma: 1 });
   });
+
+  it('на ч/б изображении (R=G=B) master сохраняет каналы одинаковыми', () => {
+    const pixels = new Uint8ClampedArray([80, 80, 80, 255]);
+    const state = createDefaultLevelsState();
+    state.master = { black: 0, white: 160, gamma: 1 };
+
+    const result = applyLevels(pixels, state);
+
+    expect(result[0]).toBe(result[1]);
+    expect(result[1]).toBe(result[2]);
+  });
+
+  it('несколько целей применяются одновременно за один проход', () => {
+    const pixels = makePixels();
+    const state = createDefaultLevelsState();
+    state.r = { black: 0, white: 128, gamma: 1 };
+    state.g = { black: 0, white: 64, gamma: 1 };
+
+    const result = applyLevels(pixels, state);
+
+    expect(result[0]).toBeGreaterThan(pixels[0]);
+    expect(result[1]).toBeGreaterThan(pixels[1]);
+    expect(result[2]).toBe(pixels[2]);
+  });
 });
