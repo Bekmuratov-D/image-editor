@@ -3,6 +3,7 @@ import { useImageLoader } from '../hooks/useImageLoader';
 import { useChannelVisibility } from '../hooks/useChannelVisibility';
 import { useEyedropper } from '../hooks/useEyedropper';
 import { useLevelsDialog } from '../hooks/useLevelsDialog';
+import { useZoom } from '../hooks/useZoom';
 import { CanvasViewer } from './CanvasViewer/CanvasViewer';
 import { FileToolbar } from './FileToolbar/FileToolbar';
 import { StatusBar } from './StatusBar/StatusBar';
@@ -17,6 +18,7 @@ function App() {
   const { image, fileName, error, loadFile, replaceImage } = useImageLoader();
   const levels = useLevelsDialog(image, { onApply: replaceImage });
   const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image, levels.previewPixels);
+  const zoom = useZoom(image, displayPixels);
   const eyedropper = useEyedropper(image);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -47,6 +49,7 @@ function App() {
       </header>
       <main className={styles.main}>
         <div
+          ref={zoom.containerRef}
           className={`${styles.canvasArea} ${isDragging ? styles.canvasAreaDragging : ''}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -54,7 +57,9 @@ function App() {
         >
           <CanvasViewer
             image={image}
-            displayPixels={displayPixels}
+            displayPixels={zoom.zoomedPixels}
+            canvasWidth={zoom.canvasWidth}
+            canvasHeight={zoom.canvasHeight}
             eyedropperActive={eyedropper.active}
             onPixelPick={eyedropper.pickAt}
           />
@@ -71,7 +76,13 @@ function App() {
         </aside>
       </main>
       <footer className={styles.footer}>
-        <StatusBar image={image} fileName={fileName} error={error} />
+        <StatusBar
+          image={image}
+          fileName={fileName}
+          error={error}
+          zoomPercent={zoom.zoomPercent}
+          onZoomChange={zoom.setZoomPercent}
+        />
       </footer>
       <LevelsDialog image={image} levels={levels} />
     </div>
