@@ -2,17 +2,21 @@ import { useState, type DragEvent } from 'react';
 import { useImageLoader } from '../hooks/useImageLoader';
 import { useChannelVisibility } from '../hooks/useChannelVisibility';
 import { useEyedropper } from '../hooks/useEyedropper';
+import { useLevelsDialog } from '../hooks/useLevelsDialog';
 import { CanvasViewer } from './CanvasViewer/CanvasViewer';
 import { FileToolbar } from './FileToolbar/FileToolbar';
 import { StatusBar } from './StatusBar/StatusBar';
 import { ChannelsPanel } from './ChannelsPanel/ChannelsPanel';
 import { EyedropperButton } from './EyedropperTool/EyedropperButton';
 import { EyedropperReadout } from './EyedropperTool/EyedropperReadout';
+import { LevelsButton } from './LevelsTool/LevelsButton';
+import { LevelsDialog } from './LevelsTool/LevelsDialog';
 import styles from './App.module.css';
 
 function App() {
-  const { image, fileName, error, loadFile } = useImageLoader();
-  const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image);
+  const { image, fileName, error, loadFile, replaceImage } = useImageLoader();
+  const levels = useLevelsDialog(image, { onApply: replaceImage });
+  const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image, levels.previewPixels);
   const eyedropper = useEyedropper(image);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -39,6 +43,7 @@ function App() {
       <header className={styles.header}>
         <FileToolbar image={image} onFileSelected={loadFile} />
         <EyedropperButton active={eyedropper.active} disabled={!image} onToggle={eyedropper.toggle} />
+        <LevelsButton disabled={!image} onOpen={levels.open} />
       </header>
       <main className={styles.main}>
         <div
@@ -68,6 +73,7 @@ function App() {
       <footer className={styles.footer}>
         <StatusBar image={image} fileName={fileName} error={error} />
       </footer>
+      <LevelsDialog image={image} levels={levels} />
     </div>
   );
 }

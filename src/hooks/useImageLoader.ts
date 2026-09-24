@@ -34,5 +34,9 @@ export function useImageLoader() {
     }
   }, []);
 
-  return { ...state, loadFile };
+  const replaceImage = useCallback((next: RasterImage) => {
+    setState((prev) => ({ ...prev, image: next }));
+  }, []);
+
+  return { ...state, loadFile, replaceImage };
 }
