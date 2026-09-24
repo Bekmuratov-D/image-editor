@@ -3,6 +3,7 @@ import { useImageLoader } from '../hooks/useImageLoader';
 import { useChannelVisibility } from '../hooks/useChannelVisibility';
 import { useEyedropper } from '../hooks/useEyedropper';
 import { useLevelsDialog } from '../hooks/useLevelsDialog';
+import { useResizeDialog } from '../hooks/useResizeDialog';
 import { useZoom } from '../hooks/useZoom';
 import { CanvasViewer } from './CanvasViewer/CanvasViewer';
 import { FileToolbar } from './FileToolbar/FileToolbar';
@@ -12,11 +13,14 @@ import { EyedropperButton } from './EyedropperTool/EyedropperButton';
 import { EyedropperReadout } from './EyedropperTool/EyedropperReadout';
 import { LevelsButton } from './LevelsTool/LevelsButton';
 import { LevelsDialog } from './LevelsTool/LevelsDialog';
+import { ResizeButton } from './ResizeTool/ResizeButton';
+import { ResizeDialog } from './ResizeTool/ResizeDialog';
 import styles from './App.module.css';
 
 function App() {
   const { image, fileName, error, loadFile, replaceImage } = useImageLoader();
   const levels = useLevelsDialog(image, { onApply: replaceImage });
+  const resize = useResizeDialog(image, { onApply: replaceImage });
   const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image, levels.previewPixels);
   const zoom = useZoom(image, displayPixels);
   const eyedropper = useEyedropper(image);
@@ -46,6 +50,7 @@ function App() {
         <FileToolbar image={image} onFileSelected={loadFile} />
         <EyedropperButton active={eyedropper.active} disabled={!image} onToggle={eyedropper.toggle} />
         <LevelsButton disabled={!image} onOpen={levels.open} />
+        <ResizeButton disabled={!image} onOpen={resize.open} />
       </header>
       <main className={styles.main}>
         <div
@@ -85,6 +90,7 @@ function App() {
         />
       </footer>
       <LevelsDialog image={image} levels={levels} />
+      <ResizeDialog image={image} resize={resize} />
     </div>
   );
 }
