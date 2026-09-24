@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import type { RasterImage } from '../../core/image/RasterImage';
 import type { useLevelsDialog } from '../../hooks/useLevelsDialog';
 import type { LevelsTargetId } from '../../core/levels/applyLevels';
 import { computeHistogramForTarget } from '../../core/histogram/computeHistogram';
+import { Modal } from '../Modal/Modal';
 import { HistogramChart } from './HistogramChart';
 import { LevelsSliders } from './LevelsSliders';
 import styles from './LevelsDialog.module.css';
@@ -29,21 +30,6 @@ const TARGET_COLORS: Record<LevelsTargetId, string> = {
 };
 
 export function LevelsDialog({ image, levels }: LevelsDialogProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) {
-      return;
-    }
-    if (levels.isOpen && !dialog.open) {
-      dialog.showModal();
-    }
-    if (!levels.isOpen && dialog.open) {
-      dialog.close();
-    }
-  }, [levels.isOpen]);
-
   const availableTargets: LevelsTargetId[] = useMemo(() => {
     const targets: LevelsTargetId[] = ['master', 'r', 'g', 'b'];
     if (image?.hasMask) {
@@ -62,7 +48,7 @@ export function LevelsDialog({ image, levels }: LevelsDialogProps) {
   const settings = levels.state[levels.selectedTarget];
 
   return (
-    <dialog ref={dialogRef} className={styles.dialog} onCancel={levels.cancel}>
+    <Modal isOpen={levels.isOpen} onClose={levels.cancel} className={styles.dialog}>
       <h2 className={styles.title}>Уровни</h2>
 
       <div className={styles.row}>
@@ -127,6 +113,6 @@ export function LevelsDialog({ image, levels }: LevelsDialogProps) {
           Применить
         </button>
       </div>
-    </dialog>
+    </Modal>
   );
 }
