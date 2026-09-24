@@ -4,6 +4,7 @@ import type { useLevelsDialog } from '../../hooks/useLevelsDialog';
 import type { LevelsTargetId } from '../../core/levels/applyLevels';
 import { computeHistogramForTarget } from '../../core/histogram/computeHistogram';
 import { HistogramChart } from './HistogramChart';
+import { LevelsSliders } from './LevelsSliders';
 import styles from './LevelsDialog.module.css';
 
 interface LevelsDialogProps {
@@ -93,44 +94,15 @@ export function LevelsDialog({ image, levels }: LevelsDialogProps) {
 
       <HistogramChart histogram={histogram} scale={levels.histogramScale} color={TARGET_COLORS[levels.selectedTarget]} />
 
+      <LevelsSliders
+        settings={settings}
+        onChange={(next) => levels.updateTarget(levels.selectedTarget, next)}
+      />
+
       <div className={styles.inputsRow}>
-        <label className={styles.field}>
-          Чёрная точка
-          <input
-            type="number"
-            min={0}
-            max={255}
-            value={settings.black}
-            onChange={(e) =>
-              levels.updateTarget(levels.selectedTarget, { ...settings, black: Number(e.target.value) })
-            }
-          />
-        </label>
-        <label className={styles.field}>
-          Гамма
-          <input
-            type="number"
-            min={0.1}
-            max={9.9}
-            step={0.1}
-            value={settings.gamma}
-            onChange={(e) =>
-              levels.updateTarget(levels.selectedTarget, { ...settings, gamma: Number(e.target.value) })
-            }
-          />
-        </label>
-        <label className={styles.field}>
-          Белая точка
-          <input
-            type="number"
-            min={0}
-            max={255}
-            value={settings.white}
-            onChange={(e) =>
-              levels.updateTarget(levels.selectedTarget, { ...settings, white: Number(e.target.value) })
-            }
-          />
-        </label>
+        <span className={styles.field}>Чёрная: {settings.black}</span>
+        <span className={styles.field}>Гамма: {settings.gamma.toFixed(2)}</span>
+        <span className={styles.field}>Белая: {settings.white}</span>
       </div>
 
       <div className={styles.row}>
