@@ -19,14 +19,16 @@ export function getChannelProfile(image: RasterImage): ChannelProfile {
   const { isGrayscale, hasMask: hasAlpha } = image;
 
   const colorChannels: ChannelDescriptor[] = isGrayscale
-    ? [{ id: 'gray', label: 'Ч/Б' }]
+    ? [{ id: 'gray', label: 'Ч/Б — оттенки серого' }]
     : [
-        { id: 'r', label: 'R' },
-        { id: 'g', label: 'G' },
-        { id: 'b', label: 'B' },
+        { id: 'r', label: 'R — красный' },
+        { id: 'g', label: 'G — зелёный' },
+        { id: 'b', label: 'B — синий' },
       ];
 
-  const channels = hasAlpha ? [...colorChannels, { id: 'alpha' as const, label: 'Alpha' }] : colorChannels;
+  const channels = hasAlpha
+    ? [...colorChannels, { id: 'alpha' as const, label: 'Alpha — прозрачность' }]
+    : colorChannels;
 
   const category: ChannelCategory = isGrayscale
     ? hasAlpha

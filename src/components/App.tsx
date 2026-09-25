@@ -21,7 +21,7 @@ import { FilterDialog } from './FilterTool/FilterDialog';
 import styles from './App.module.css';
 
 function App() {
-  const { image, fileName, error, loadFile, replaceImage } = useImageLoader();
+  const { image, fileName, fileSize, error, loadFile, replaceImage } = useImageLoader();
   const levels = useLevelsDialog(image, { onApply: replaceImage });
   const resize = useResizeDialog(image, { onApply: replaceImage });
   const filters = useFilterDialog(image, { onApply: replaceImage });
@@ -90,6 +90,7 @@ function App() {
         <StatusBar
           image={image}
           fileName={fileName}
+          fileSize={fileSize}
           error={error}
           zoomPercent={zoom.zoomPercent}
           onZoomChange={zoom.setZoomPercent}

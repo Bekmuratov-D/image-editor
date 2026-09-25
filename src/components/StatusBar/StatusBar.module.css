@@ -2,13 +2,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.info {
-  white-space: nowrap;
+.fields {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.field {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.label {
+  color: #71717a;
 }
 
 .zoom {

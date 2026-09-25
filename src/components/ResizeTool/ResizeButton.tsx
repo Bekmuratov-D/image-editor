@@ -8,7 +8,7 @@ interface ResizeButtonProps {
 export function ResizeButton({ disabled, onOpen }: ResizeButtonProps) {
   return (
     <button type="button" className={styles.button} onClick={onOpen} disabled={disabled}>
-      Изменить размер
+      📐 Изменить размер
     </button>
   );
 }

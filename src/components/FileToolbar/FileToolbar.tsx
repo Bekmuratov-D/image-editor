@@ -3,6 +3,7 @@ import type { RasterImage, SourceFormat } from '../../core/image/RasterImage';
 import { encodePngJpg } from '../../core/codecs/pngJpgCodec';
 import { encodeGb7 } from '../../core/codecs/gb7/gb7Encoder';
 import { downloadBytes } from '../../core/download';
+import { Modal } from '../Modal/Modal';
 import styles from './FileToolbar.module.css';
 
 interface FileToolbarProps {
@@ -14,6 +15,7 @@ const EXTENSION: Record<SourceFormat, string> = { png: 'png', jpg: 'jpg', gb7: '
 
 export function FileToolbar({ image, onFileSelected }: FileToolbarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [saveFormat, setSaveFormat] = useState<SourceFormat>('png');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,17 +34,17 @@ export function FileToolbar({ image, onFileSelected }: FileToolbarProps) {
 
     if (saveFormat === 'gb7') {
       downloadBytes(encodeGb7(image), fileName);
-      return;
+    } else {
+      const blob = await encodePngJpg(image, saveFormat === 'png' ? 'image/png' : 'image/jpeg');
+      downloadBytes(blob, fileName);
     }
-
-    const blob = await encodePngJpg(image, saveFormat === 'png' ? 'image/png' : 'image/jpeg');
-    downloadBytes(blob, fileName);
+    setIsSaveOpen(false);
   };
 
   return (
     <div className={styles.toolbar}>
       <button type="button" className={styles.button} onClick={() => inputRef.current?.click()}>
-        Открыть изображение
+        📂 Открыть
       </button>
       <input
         ref={inputRef}
@@ -52,18 +54,33 @@ export function FileToolbar({ image, onFileSelected }: FileToolbarProps) {
         onChange={handleChange}
       />
 
-      <select
-        className={styles.select}
-        value={saveFormat}
-        onChange={(e) => setSaveFormat(e.target.value as SourceFormat)}
-      >
-        <option value="png">PNG</option>
-        <option value="jpg">JPG</option>
-        <option value="gb7">GB7</option>
-      </select>
-      <button type="button" className={styles.button} onClick={handleSave} disabled={!image}>
-        Сохранить
+      <button type="button" className={styles.button} onClick={() => setIsSaveOpen(true)} disabled={!image}>
+        💾 Сохранить
       </button>
+
+      <Modal isOpen={isSaveOpen} onClose={() => setIsSaveOpen(false)} className={styles.saveDialog}>
+        <h2 className={styles.saveTitle}>Сохранить изображение</h2>
+        <div className={styles.saveRow}>
+          <span>Формат</span>
+          <select
+            className={styles.select}
+            value={saveFormat}
+            onChange={(e) => setSaveFormat(e.target.value as SourceFormat)}
+          >
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="gb7">GB7</option>
+          </select>
+        </div>
+        <div className={styles.saveButtons}>
+          <button type="button" className={styles.button} onClick={() => setIsSaveOpen(false)}>
+            Отмена
+          </button>
+          <button type="button" className={`${styles.button} ${styles.buttonPrimary}`} onClick={handleSave}>
+            Сохранить
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -6,12 +6,30 @@ import styles from './StatusBar.module.css';
 interface StatusBarProps {
   image: RasterImage | null;
   fileName: string | null;
+  fileSize: number | null;
   error: string | null;
   zoomPercent: number;
   onZoomChange: (percent: number) => void;
 }
 
-export function StatusBar({ image, fileName, error, zoomPercent, onZoomChange }: StatusBarProps) {
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) {
+    return `${bytes} байт`;
+  }
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} КБ`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} МБ`;
+}
+
+function formatBitDepth(image: RasterImage): string {
+  if (image.sourceFormat === 'gb7') {
+    return image.hasMask ? '8 бит/пиксель — 7 бит серый + 1 бит маска (GB7)' : '7 бит/пиксель — оттенки серого (GB7)';
+  }
+  return '32 бит/пиксель — 8 бит × 4 кан. (RGBA)';
+}
+
+export function StatusBar({ image, fileName, fileSize, error, zoomPercent, onZoomChange }: StatusBarProps) {
   const rafRef = useRef<number | null>(null);
   const pendingRef = useRef<number | null>(null);
 
@@ -39,11 +57,32 @@ export function StatusBar({ image, fileName, error, zoomPercent, onZoomChange }:
 
   return (
     <div className={styles.bar}>
-      <span className={styles.info}>
-        {fileName ? `${fileName} · ` : ''}
-        {image.width}×{image.height}px · глубина цвета: {image.bitDepth} бит
-      </span>
+      <div className={styles.fields}>
+        {fileName && (
+          <span className={styles.field}>
+            <span className={styles.label}>Файл:</span> {fileName}
+          </span>
+        )}
+        <span className={styles.field}>
+          <span className={styles.label}>Формат:</span> {image.sourceFormat.toUpperCase()}
+        </span>
+        <span className={styles.field}>
+          <span className={styles.label}>Ширина:</span> {image.width} px
+        </span>
+        <span className={styles.field}>
+          <span className={styles.label}>Высота:</span> {image.height} px
+        </span>
+        <span className={styles.field}>
+          <span className={styles.label}>Глубина цвета:</span> {formatBitDepth(image)}
+        </span>
+        {fileSize != null && (
+          <span className={styles.field}>
+            <span className={styles.label}>Размер:</span> {formatFileSize(fileSize)}
+          </span>
+        )}
+      </div>
       <span className={styles.zoom}>
+        <span className={styles.label}>Масштаб:</span>
         <input
           type="range"
           min={MIN_ZOOM}

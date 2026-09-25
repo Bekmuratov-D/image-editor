@@ -50,7 +50,15 @@ export function CanvasViewer({
   };
 
   if (!image) {
-    return <div className={styles.placeholder}>Загрузите изображение (PNG, JPG или GB7)</div>;
+    return (
+      <div className={styles.viewport}>
+        <div className={styles.dropzone}>
+          <div className={styles.dropzoneIcon}>🖼️</div>
+          <div className={styles.dropzoneTitle}>Загрузите изображение</div>
+          <div className={styles.dropzoneHint}>PNG, JPG или GB7 — перетащите файл сюда или нажмите "Открыть"</div>
+        </div>
+      </div>
+    );
   }
 
   return (

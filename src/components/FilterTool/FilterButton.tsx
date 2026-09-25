@@ -8,7 +8,7 @@ interface FilterButtonProps {
 export function FilterButton({ disabled, onOpen }: FilterButtonProps) {
   return (
     <button type="button" className={styles.button} onClick={onOpen} disabled={disabled}>
-      Фильтр
+      🎛️ Фильтр
     </button>
   );
 }

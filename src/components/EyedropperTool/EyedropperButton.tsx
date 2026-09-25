@@ -15,7 +15,7 @@ export function EyedropperButton({ active, disabled, onToggle }: EyedropperButto
       disabled={disabled}
       aria-pressed={active}
     >
-      Пипетка
+      💧 Пипетка
     </button>
   );
 }

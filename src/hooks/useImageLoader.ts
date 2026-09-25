@@ -7,6 +7,7 @@ import { detectFormat } from '../core/formats/detectFormat';
 interface ImageLoaderState {
   image: RasterImage | null;
   fileName: string | null;
+  fileSize: number | null;
   error: string | null;
   isLoading: boolean;
 }
@@ -15,6 +16,7 @@ export function useImageLoader() {
   const [state, setState] = useState<ImageLoaderState>({
     image: null,
     fileName: null,
+    fileSize: null,
     error: null,
     isLoading: false,
   });
@@ -24,7 +26,7 @@ export function useImageLoader() {
     try {
       const format = await detectFormat(file);
       const image = format === 'gb7' ? decodeGb7(await file.arrayBuffer()) : await decodePngJpg(file);
-      setState({ image, fileName: file.name, error: null, isLoading: false });
+      setState({ image, fileName: file.name, fileSize: file.size, error: null, isLoading: false });
     } catch (err) {
       setState((prev) => ({
         ...prev,

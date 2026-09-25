@@ -8,7 +8,7 @@ interface LevelsButtonProps {
 export function LevelsButton({ disabled, onOpen }: LevelsButtonProps) {
   return (
     <button type="button" className={styles.button} onClick={onOpen} disabled={disabled}>
-      Уровни
+      🎚️ Уровни
     </button>
   );
 }
