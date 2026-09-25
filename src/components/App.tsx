@@ -16,6 +16,8 @@ import { LevelsButton } from './LevelsTool/LevelsButton';
 import { LevelsDialog } from './LevelsTool/LevelsDialog';
 import { ResizeButton } from './ResizeTool/ResizeButton';
 import { ResizeDialog } from './ResizeTool/ResizeDialog';
+import { FilterButton } from './FilterTool/FilterButton';
+import { FilterDialog } from './FilterTool/FilterDialog';
 import styles from './App.module.css';
 
 function App() {
@@ -54,6 +56,7 @@ function App() {
         <EyedropperButton active={eyedropper.active} disabled={!image} onToggle={eyedropper.toggle} />
         <LevelsButton disabled={!image} onOpen={levels.open} />
         <ResizeButton disabled={!image} onOpen={resize.open} />
+        <FilterButton disabled={!image} onOpen={filters.open} />
       </header>
       <main className={styles.main}>
         <div
@@ -94,6 +97,7 @@ function App() {
       </footer>
       <LevelsDialog image={image} levels={levels} />
       <ResizeDialog image={image} resize={resize} />
+      <FilterDialog profile={profile} filters={filters} />
     </div>
   );
 }

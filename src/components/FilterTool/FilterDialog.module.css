@@ -1,0 +1,79 @@
+.dialog {
+  width: min(360px, 90vw);
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.select {
+  padding: 4px 8px;
+  border: 1px solid #a1a1aa;
+  border-radius: 6px;
+}
+
+.kernelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 12px 0;
+}
+
+.kernelGrid input {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #a1a1aa;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #71717a;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  padding: 6px 14px;
+  border: 1px solid #a1a1aa;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.buttonPrimary {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
