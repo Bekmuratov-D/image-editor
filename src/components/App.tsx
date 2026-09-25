@@ -4,6 +4,7 @@ import { useChannelVisibility } from '../hooks/useChannelVisibility';
 import { useEyedropper } from '../hooks/useEyedropper';
 import { useLevelsDialog } from '../hooks/useLevelsDialog';
 import { useResizeDialog } from '../hooks/useResizeDialog';
+import { useFilterDialog } from '../hooks/useFilterDialog';
 import { useZoom } from '../hooks/useZoom';
 import { CanvasViewer } from './CanvasViewer/CanvasViewer';
 import { FileToolbar } from './FileToolbar/FileToolbar';
@@ -21,7 +22,9 @@ function App() {
   const { image, fileName, error, loadFile, replaceImage } = useImageLoader();
   const levels = useLevelsDialog(image, { onApply: replaceImage });
   const resize = useResizeDialog(image, { onApply: replaceImage });
-  const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image, levels.previewPixels);
+  const filters = useFilterDialog(image, { onApply: replaceImage });
+  const activePreviewPixels = levels.previewPixels ?? filters.previewPixels ?? null;
+  const { profile, visibility, toggle, displayPixels } = useChannelVisibility(image, activePreviewPixels);
   const zoom = useZoom(image, displayPixels);
   const eyedropper = useEyedropper(image);
   const [isDragging, setIsDragging] = useState(false);
