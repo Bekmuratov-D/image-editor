@@ -3,6 +3,8 @@ import type { RasterImage } from '../../core/image/RasterImage';
 import type { useLevelsDialog } from '../../hooks/useLevelsDialog';
 import type { LevelsTargetId } from '../../core/levels/applyLevels';
 import { computeHistogramForTarget } from '../../core/histogram/computeHistogram';
+import { getChannelProfile } from '../../core/channels/channelProfile';
+import { getLevelsTargets } from '../../core/levels/levelsTargets';
 import { Modal } from '../Modal/Modal';
 import { HistogramChart } from './HistogramChart';
 import { LevelsSliders } from './LevelsSliders';
@@ -13,14 +15,6 @@ interface LevelsDialogProps {
   levels: ReturnType<typeof useLevelsDialog>;
 }
 
-const TARGET_LABELS: Record<LevelsTargetId, string> = {
-  master: 'Master',
-  r: 'Red',
-  g: 'Green',
-  b: 'Blue',
-  alpha: 'Alpha',
-};
-
 const TARGET_COLORS: Record<LevelsTargetId, string> = {
   master: '#3f3f46',
   r: '#ef4444',
@@ -30,13 +24,7 @@ const TARGET_COLORS: Record<LevelsTargetId, string> = {
 };
 
 export function LevelsDialog({ image, levels }: LevelsDialogProps) {
-  const availableTargets: LevelsTargetId[] = useMemo(() => {
-    const targets: LevelsTargetId[] = ['master', 'r', 'g', 'b'];
-    if (image?.hasMask) {
-      targets.push('alpha');
-    }
-    return targets;
-  }, [image]);
+  const availableTargets = useMemo(() => (image ? getLevelsTargets(getChannelProfile(image)) : []), [image]);
 
   const histogram = useMemo(() => {
     if (!image) {
@@ -59,8 +47,8 @@ export function LevelsDialog({ image, levels }: LevelsDialogProps) {
           onChange={(e) => levels.setSelectedTarget(e.target.value as LevelsTargetId)}
         >
           {availableTargets.map((target) => (
-            <option key={target} value={target}>
-              {TARGET_LABELS[target]}
+            <option key={target.id} value={target.id}>
+              {target.label}
             </option>
           ))}
         </select>

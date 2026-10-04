@@ -24,6 +24,8 @@
 }
 
 .select {
+  min-width: 0;
+  max-width: 100%;
   padding: 4px 8px;
   border: 1px solid #a1a1aa;
   border-radius: 6px;
@@ -36,7 +38,10 @@
 }
 
 .field {
+  /* flex-элемент по умолчанию не ужимается меньше содержимого (min-width: auto),
+     а у input[type=number] своя ширина ~20 символов — без этого два поля вылезают за окно. */
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -45,6 +50,8 @@
 }
 
 .field input {
+  width: 100%;
+  min-width: 0;
   padding: 4px 6px;
   border: 1px solid #a1a1aa;
   border-radius: 4px;

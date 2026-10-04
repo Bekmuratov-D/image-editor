@@ -10,6 +10,7 @@ function makeRgbaImage(): RasterImage {
     height: 1,
     pixels: new Uint8ClampedArray([10, 20, 30, 128]),
     bitDepth: 8,
+    bitsPerPixel: 32,
     hasMask: true,
     isGrayscale: false,
     sourceFormat: 'png',

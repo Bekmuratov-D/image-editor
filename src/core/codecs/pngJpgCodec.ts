@@ -1,5 +1,5 @@
 import type { RasterImage } from '../image/RasterImage';
-import { hasAlphaPngColorType, isGrayscalePngColorType, readPngColorType } from './pngHeader';
+import { readJpegColorInfo, readPngColorInfo } from './sourceColorInfo';
 
 function loadImageElement(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -25,22 +25,16 @@ export async function decodePngJpg(file: File): Promise<RasterImage> {
     const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
     const isPng = file.type.includes('png');
-    let isGrayscale = false;
-    let hasAlpha = false;
-    if (isPng) {
-      const headerBytes = await file.slice(0, 26).arrayBuffer();
-      const colorType = readPngColorType(headerBytes);
-      isGrayscale = isGrayscalePngColorType(colorType);
-      hasAlpha = hasAlphaPngColorType(colorType);
-    }
+    // Глубину цвета берём из заголовка файла, а не из data: canvas всегда отдаёт RGBA 8 бит.
+    const colorInfo = isPng
+      ? readPngColorInfo(await file.slice(0, 26).arrayBuffer())
+      : readJpegColorInfo(await file.arrayBuffer());
 
     return {
       width,
       height,
       pixels: data,
-      bitDepth: 8,
-      hasMask: hasAlpha,
-      isGrayscale,
+      ...colorInfo,
       sourceFormat: isPng ? 'png' : 'jpg',
     };
   } finally {

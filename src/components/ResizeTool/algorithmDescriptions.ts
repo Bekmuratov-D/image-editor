@@ -1,7 +1,7 @@
 import type { InterpolationId } from '../../core/scaling/InterpolationAlgorithm';
 
 export const ALGORITHM_LABELS: Record<InterpolationId, string> = {
-  nearest: 'Ближайший соседгол',
+  nearest: 'Ближайший сосед',
   bilinear: 'Билинейная',
 };
 

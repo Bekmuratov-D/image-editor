@@ -18,6 +18,8 @@
 }
 
 .select {
+  min-width: 0;
+  max-width: 100%;
   padding: 4px 8px;
   border: 1px solid #a1a1aa;
   border-radius: 6px;

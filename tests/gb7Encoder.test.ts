@@ -9,6 +9,7 @@ function makeImage(pixels: number[], width: number, height: number, hasMask = fa
     height,
     pixels: new Uint8ClampedArray(pixels),
     bitDepth: 8,
+    bitsPerPixel: hasMask ? 32 : 24,
     hasMask,
     isGrayscale: false,
     sourceFormat: 'png',

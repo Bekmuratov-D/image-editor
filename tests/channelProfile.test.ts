@@ -8,6 +8,7 @@ function makeImage(isGrayscale: boolean, hasMask: boolean): RasterImage {
     height: 1,
     pixels: new Uint8ClampedArray(4),
     bitDepth: 8,
+    bitsPerPixel: 8 * ((isGrayscale ? 1 : 3) + (hasMask ? 1 : 0)),
     hasMask,
     isGrayscale,
     sourceFormat: 'png',

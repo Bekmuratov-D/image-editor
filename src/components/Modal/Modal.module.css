@@ -2,6 +2,11 @@
   border: none;
   border-radius: 8px;
   padding: 16px;
+  /* Окно никогда не выходит за экран: если содержимое не влезает — прокрутка внутри по вертикали. */
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .dialog::backdrop {

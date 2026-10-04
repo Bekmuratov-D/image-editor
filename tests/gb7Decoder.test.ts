@@ -80,6 +80,7 @@ describe('decodeGb7', () => {
     expect(image.width).toBe(2);
     expect(image.height).toBe(1);
     expect(image.bitDepth).toBe(7);
+    expect(image.bitsPerPixel).toBe(7);
     expect(image.hasMask).toBe(false);
     expect(Array.from(image.pixels)).toEqual([0, 0, 0, 255, 255, 255, 255, 255]);
   });
@@ -91,6 +92,7 @@ describe('decodeGb7', () => {
     const image = decodeGb7(buffer);
 
     expect(image.hasMask).toBe(true);
+    expect(image.bitsPerPixel).toBe(8);
     expect(image.pixels[3]).toBe(0);
     expect(image.pixels[7]).toBe(255);
   });
